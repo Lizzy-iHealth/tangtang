@@ -19,7 +19,7 @@ class Xian {
     r=headX;
     dia=3;
     hz = 200;
-    time = 5;
+    time = DEFAULT_PLAY_TIME;
   }
   
   void draw(){
@@ -27,23 +27,37 @@ class Xian {
     strokeWeight(dia);
     int totalAngle = time*hz*2*PI;
     curA = a*(1-angle/totalAngle)*cos(angle);
- 
-    line(tailX,tailY,l,tailY); //tail to left position
-    line(l,tailY,r,headY+curA);   // left hand to right hand
-    line(r,headY+curA,headX,headY); // right hand to head
+    switch (status) {
+      case 0:
+        line(tailX,tailY,headX,headY);
+        break;
+      case 1:
+        line(tailX,tailY,l,tailY); //tail to left position
+        line(l,tailY,r,headY+curA);   // left hand to right hand
+        line(r,headY+curA,headX,headY); // right hand to head
+        break;
+    }
    // line(headX,headY,tailX,tailY);
+  }
+  boolean crossed(int px, int py, int x,int y){
+      if((py-headY)*(headY-y)>0) return true;
+      else return false;
   }
   void update(){
     if(status==1){
       float tA=time*hz*2*PI;
       angle+=2*PI*hz/FrameRate;
-      if (angle > tA){status=0;}
+      if (angle > tA){
+        status=0;
+        angle =0;  
+      }
     }
   }
   void vibrate (float a, float l, float r){ //Amplitude, lefthand position, righthand position
     this.a=a;
     this.l=l;
     this.r=r;
+    angle = 0;
     status = 1;
   }
 }
