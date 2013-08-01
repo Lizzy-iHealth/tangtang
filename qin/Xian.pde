@@ -7,6 +7,8 @@ class Xian {
   float hz;
   String soundfile;
   int status;//0:stable, 1:san yin,...
+  
+  AudioPlayer[] tunes; // san, an, fan
   // Constructor
   Xian(int name, float headX,float headY,float tailX,float tailY){
     this.name = name;
@@ -20,13 +22,36 @@ class Xian {
     dia=3;
     hz = 200;
     time = DEFAULT_PLAY_TIME;
+    tunes = new AudioPlayer[3]; //
+    loadSoundFile();
   }
-  
+  void loadSoundFile(){
+    for (int i =0;i<3;i++){
+      String fn = str(name)+"-"+str(i)+".mp3";
+      println("load:"+fn);
+      tunes[i] = minim.loadFile(fn,2048);
+    }
+  }
+  void playTunes(int h){
+    tunes[h].rewind();
+    tunes[h].play();
+  }
+  void play(int status,float a, float l, float r){
+    this.status = status;
+    vibrate(a,l,r);
+    switch (status){
+      case 0:
+        break;
+      case 1:
+        playTunes(0);
+        break;
+    }
+  }
   void draw(){
     stroke(255);
     strokeWeight(dia);
-    int totalAngle = time*hz*2*PI;
-    curA = a*(1-angle/totalAngle)*cos(angle);
+    float totalAngle = time*hz*2*PI;
+    float curA = a*(1-angle/totalAngle)*cos(angle);
     switch (status) {
       case 0:
         line(tailX,tailY,headX,headY);
@@ -49,15 +74,15 @@ class Xian {
       angle+=2*PI*hz/FrameRate;
       if (angle > tA){
         status=0;
-        angle =0;  
+        angle =0; 
       }
     }
+    draw();
   }
   void vibrate (float a, float l, float r){ //Amplitude, lefthand position, righthand position
     this.a=a;
     this.l=l;
     this.r=r;
     angle = 0;
-    status = 1;
   }
 }
