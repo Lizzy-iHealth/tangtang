@@ -40,11 +40,15 @@ class Xian {
     this.status = status;
     vibrate(a,l,r);
     switch (status){
-      case 0:
+      case 0:  // silent
         break;
-      case 1:
+      case 1:  //san yin
         playTunes(0);
         break;
+      case 2:  // an yin
+        break;
+      case 3: // fan yin
+        playTunes(2);
     }
   }
   void draw(){
@@ -57,6 +61,10 @@ class Xian {
         line(tailX,tailY,headX,headY);
         break;
       case 1:
+
+      case 2:
+
+      case 3:
         line(tailX,tailY,l,tailY); //tail to left position
         line(l,tailY,r,headY+curA);   // left hand to right hand
         line(r,headY+curA,headX,headY); // right hand to head
@@ -68,8 +76,12 @@ class Xian {
       if((py-headY)*(headY-y)>0) return true;
       else return false;
   }
+  boolean near(int x, int y){
+    if(abs(y-headY)<EPS) return true;
+    else return false;
+  }
   void update(){
-    if(status==1){
+    if(status>0){
       float tA=time*hz*2*PI;
       angle+=2*PI*hz/FrameRate;
       if (angle > tA){
@@ -84,5 +96,11 @@ class Xian {
     this.l=l;
     this.r=r;
     angle = 0;
+  }
+  
+  void stop(){
+    for (int i = 0; i<tunes.length; i++) {
+      tunes[i].close();
+    }
   }
 }
