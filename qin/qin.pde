@@ -2,6 +2,8 @@ import ddf.minim.*;
 
 int DEFAULT_XIAN_NUM =7;
 Xian[] xian;
+Hui[] hui;
+int DEFAULT_HUI_NUM = 13;
 float[] xianHight;
 int FrameRate = 30;
 int DEFAULT_PLAY_TIME = 2 ;// 2s play time
@@ -29,6 +31,25 @@ void setup(){
      float currentXianHeight = xianTop + xianOffset * i;
      xianHeight[i] = currentXianHeight;
      xian[i]= new Xian(i+1,xianHead,currentXianHeight,xianTail,currentXianHeight);
+  }
+  ellipseMode(RADIUS);
+  // initHui;
+  
+  float huiHeight = height*0.1;
+  float cr = (xianTop-huiHeight)*0.2;
+  float[] hr = new float[DEFAULT_HUI_NUM];
+  float[] hxRate={ 0.125 , 0.166 , 0.2 , 0.25, 0.333 , 0.4 , 0.5, 0.6 , 0.666 , 0.75, 0.8, 0.833 ,0.875  } ;
+  float HuiZoomRate = 0.9;
+  float mr = cr * pow(HuiZoomRate,floor(DEFAULT_HUI_NUM/2));
+  for(int i =0; i<= DEFAULT_HUI_NUM/2; i++){
+    hr[i]=mr;
+    hr[DEFAULT_HUI_NUM-1-i]=mr;
+    mr=mr/HuiZoomRate;
+  }
+  float xianLen=xianHead-xianTail;
+  hui = new Hui[DEFAULT_HUI_NUM];
+  for(int i =0; i< DEFAULT_HUI_NUM; i++){
+    hui[i]=new Hui(DEFAULT_HUI_NUM-i,xianTail+xianLen*hxRate[i],huiHeight,hr[i]);
   }
   
 }
@@ -92,6 +113,9 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
 void draw(){
   
   background(0);
+  for(int i =0; i< DEFAULT_HUI_NUM; i++){
+    hui[i].draw();
+  }
   for (int i = 0; i < DEFAULT_XIAN_NUM; ++i){
     xian[i].update();
   }
