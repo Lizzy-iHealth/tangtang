@@ -32,16 +32,32 @@ void setup(){
   }
   
 }
+
+boolean moveAlongX(int px, int py, int x, int y){
   
+  if( abs(px-x)>abs(py-y)) return true;
+  else return false;
+}  
 // Drag (click and hold) your mouse across the 
 // image to change the value of the rectangle
 void mouseDragged() {
-     for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
-     if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
-       int status = 1;
-       play(i,status,DEFAULT_AMP,0,mouseX);
+     if(moveAlongX(pmouseX,pmouseY,mouseX,mouseY)){
+              for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
+               if(xian[i].near(mouseX,mouseY)){
+                 int status = 2;
+                 if(xian[i].status!=20){ //not already played.
+                   play(i,status,DEFAULT_AMP,mouseX,mouseX);
+                 }
+               }
+         }
+     }else{
+       for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
+         if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
+         int status = 1;
+         play(i,status,DEFAULT_AMP,0,mouseX);
+       }
      }
-   }
+     }
 }
 
 void mouseMoved(){
