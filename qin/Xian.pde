@@ -22,7 +22,7 @@ class Xian {
     dia=3;
     hz = 200;
     time = DEFAULT_PLAY_TIME;
-    tunes = new AudioPlayer[3]; //
+    tunes = new AudioPlayer[3]; 
     loadSoundFile();
   }
   void loadSoundFile(){
@@ -70,7 +70,7 @@ class Xian {
         line(r,headY+curA,headX,headY); // right hand to head
         break;
     }
-   // line(headX,headY,tailX,tailY);
+   
   }
   boolean crossed(int px, int py, int x,int y){
       if((py-headY)*(headY-y)>0) return true;

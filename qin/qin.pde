@@ -21,6 +21,7 @@ void setup(){
   float xianBottom = height*0.95;
   
   float xianOffset=(xianBottom-xianTop)/(DEFAULT_XIAN_NUM-1);
+  EPS=xianOffset*0.3;
   xian = new Xian[DEFAULT_XIAN_NUM];
   float [] xianHeight = new float[DEFAULT_XIAN_NUM];
   for(int i = 0; i<DEFAULT_XIAN_NUM; ++i){
@@ -35,6 +36,12 @@ void setup(){
 // Drag (click and hold) your mouse across the 
 // image to change the value of the rectangle
 void mouseDragged() {
+     for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
+     if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
+       int status = 1;
+       play(i,status,DEFAULT_AMP,0,mouseX);
+     }
+   }
 }
 
 void mouseMoved(){
@@ -63,12 +70,7 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
  // audioTest();
 }
 
-void audioTest(){
-  AudioOutput out = minim.getLineOut();
-  out.playNote( 1.0, 2.9, "C3" );
-  out.playNote( 2.0, 1.9, "E3" );
-  out.playNote( 3.0, 0.9, "G3" );
-}
+
 
 
 void draw(){
