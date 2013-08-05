@@ -27,7 +27,7 @@ class PlayHistory{
     int len = last+1;
     if(total>last+1){
       head = last+1;
-      len = total%historyBufferSize;
+      len = historyBufferSize;
     }
     for(int i = 0; i< len; i++){
       println(notes[(head+i)%historyBufferSize]);
