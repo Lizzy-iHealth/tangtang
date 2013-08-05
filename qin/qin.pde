@@ -10,12 +10,14 @@ int DEFAULT_PLAY_TIME = 2 ;// 2s play time
 float DEFAULT_AMP=6;
 float EPS = 5;
 Minim minim;
+PlayHistory history;
 
 void setup(){
-  size(640,360);
+  size(1200,360);
   frameRate(FrameRate);
   minim = new Minim(this);
   
+  history = new PlayHistory();
   // draw static Xian 
   float xianHead=width;
   float xianTail=0;
@@ -80,15 +82,24 @@ void mouseDragged() {
      }
      }
 }
+void mouseReleased(){
+     for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
+     if(xian[i].near(mouseX,mouseY)&&xian[i].status==20){
+        xian[i].status=0;
+     }
+   }
+}
 
 void mouseMoved(){
   
    for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
      if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
        int status = 1;
+       
        play(i,status,DEFAULT_AMP,0,mouseX);
      }
    }
+  // println("("+mouseX+" , "+mouseY+" )");
        
 }
 

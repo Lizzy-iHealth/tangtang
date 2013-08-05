@@ -37,6 +37,9 @@ class Xian {
     tunes[h].play();
   }
   void play(int status,float a, float l, float r){
+    Note n = new Note(name,a,l,r,millis());
+    history.addNote(n);
+    history.printHistory();
     this.status = status;
     if(status==2){
       vibrate(a,l,headX);
@@ -82,7 +85,12 @@ class Xian {
    
   }
   boolean crossed(int px, int py, int x,int y){
-      if((py-headY)*(headY-y)>0) return true;
+      if(py==y) return false; // no y direction move;
+      if(py==headY) return false; // already played.
+      if((py-headY)*(headY-y)>=0) {
+        //println("cross: "+ name+py+headY+y);
+        return true;
+      }
       else return false;
   }
   boolean near(int x, int y){
