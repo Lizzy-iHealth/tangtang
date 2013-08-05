@@ -11,6 +11,7 @@ float DEFAULT_AMP=6;
 float EPS = 5;
 Minim minim;
 PlayHistory history;
+MelodyManager melodyManager;
 
 void setup(){
   size(1200,360);
@@ -54,6 +55,8 @@ void setup(){
     hui[i]=new Hui(DEFAULT_HUI_NUM-i,xianTail+xianLen*hxRate[i],huiHeight,hr[i]);
   }
   
+  //initMelody();
+  melodyManager = new MelodyManager("playlist.txt");
 }
 
 boolean moveAlongX(int px, int py, int x, int y){
@@ -114,7 +117,15 @@ void mouseClicked(){
        
 }
 void play (int i,int status,float a, float l, float r){ // xian index, vibrate status(0 still,1 san,2 an,3 fan), amplitude, lefthand position, right hand position, amplitude
-  xian[i].play(status,a,l,r);
+    xian[i].play(status,a,l,r);
+    Note n = new Note(xian[i].name,status,a,l,r,millis());
+
+    history.addNote(n);
+    
+    int[] id = history.getXianHistory(5);
+    println(join(nf(id,0)," "));
+//    history.printHistory();
+//    println("------------------------");
  // audioTest();
 }
 

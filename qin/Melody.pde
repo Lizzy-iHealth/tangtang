@@ -1,4 +1,4 @@
-Class Melody{
+class Melody{
   int[]id; // default 5 notes' xian name;
   int idLen; // default 5;
   String name;
@@ -8,13 +8,15 @@ Class Melody{
   
   Melody(int[]id, String name, String fn){
     this.id = id;
-    idLen = id.length();
+    idLen = id.length;
     this.name = name;
     soundFile = fn;
   }
   
   void loadFile(){
-    player = minim.loadfile(soundFile);
+    if(player==null){
+    player = minim.loadFile(soundFile);
+    }
   }
   
   boolean matched(int[] his){

@@ -37,10 +37,6 @@ class Xian {
     tunes[h].play();
   }
   void play(int status,float a, float l, float r){
-    Note n = new Note(name,status,a,l,r,millis());
-    history.addNote(n);
-    history.printHistory();
-    println("------------------------");
     this.status = status;
     if(status==2){
       vibrate(a,l,headX);
@@ -109,6 +105,7 @@ class Xian {
     }
     draw();
   }
+  
   void vibrate (float a, float l, float r){ //Amplitude, lefthand position, righthand position
     this.a=a;
     this.l=l;
@@ -122,3 +119,5 @@ class Xian {
     }
   }
 }
+
+

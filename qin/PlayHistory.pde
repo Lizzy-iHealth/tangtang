@@ -33,4 +33,18 @@ class PlayHistory{
       println(notes[(head+i)%historyBufferSize]);
     }
   }
+  
+  int[] getXianHistory(int len){
+    int[] id = new int[len];
+    int n = len;
+    if(n>total)n=total; 
+    int start = (last-n+1+historyBufferSize)%historyBufferSize;
+    int i = 0;
+    for(; i<n&& i<historyBufferSize; i++){
+      id[i] = notes[(start+i)%historyBufferSize].xianName;
+    }
+    
+    while(i < len){id[i++]=0;} //padding
+    return id;
+  }
 }
