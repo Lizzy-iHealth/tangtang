@@ -12,6 +12,7 @@ float EPS = 5;
 Minim minim;
 PlayHistory history;
 MelodyManager melodyManager;
+int mode; //1: nomal, 2:Melody
 
 void setup(){
   size(1200,360);
@@ -123,6 +124,14 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
     history.addNote(n);
     
     int[] id = history.getXianHistory(5);
+    if(mode != 2){
+      int mIndex = melodyManager.findMelodyById(id);
+      if(mIndex>=0){
+        mode = 2;
+        melodyManager.play(mIndex);
+      }
+    }
+    
     println(join(nf(id,0)," "));
 //    history.printHistory();
 //    println("------------------------");
