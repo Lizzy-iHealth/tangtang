@@ -47,4 +47,8 @@ class PlayHistory{
     while(i < len){id[i++]=0;} //padding
     return id;
   }
+  
+  int timeSinceLastPlayed(){
+    return millis()-notes[last].startTime; // end time will be better.
+  }
 }

@@ -6,7 +6,7 @@ Hui[] hui;
 int DEFAULT_HUI_NUM = 13;
 float[] xianHight;
 int FrameRate = 30;
-int DEFAULT_PLAY_TIME = 2 ;// 2s play time
+int DEFAULT_PLAY_TIME = 3 ;// 2s play time
 float DEFAULT_AMP=6;
 float EPS = 5;
 Minim minim;
@@ -58,6 +58,7 @@ void setup(){
   
   //initMelody();
   melodyManager = new MelodyManager("playlist.txt");
+  mode=1;
 }
 
 boolean moveAlongX(int px, int py, int x, int y){
@@ -130,9 +131,11 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
         mode = 2;
         melodyManager.play(mIndex);
       }
+    }else{
+      melodyManager.play();
     }
     
-    println(join(nf(id,0)," "));
+  //  println(join(nf(id,0)," "));
 //    history.printHistory();
 //    println("------------------------");
  // audioTest();
@@ -147,15 +150,20 @@ void draw(){
   for(int i =0; i< DEFAULT_HUI_NUM; i++){
     hui[i].draw();
   }
+  
   for (int i = 0; i < DEFAULT_XIAN_NUM; ++i){
     xian[i].update();
   }
+  
+  if(mode==2) {melodyManager.update();}
+  
 }
 
 void stop(){
   for(int i =0;i<DEFAULT_XIAN_NUM;i++){
     xian[i].stop();
   }
+  melodyManager.stop();
   minim.stop();
   super.stop();
 }

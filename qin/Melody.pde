@@ -37,4 +37,27 @@ class Melody{
     }
     player.play();
   }
+  
+  void rewind(){
+    if(player==null){
+      loadFile();
+    }
+    player.rewind();
+  }
+  
+  boolean isPlaying(){
+    return player.isPlaying();
+  }
+  void pause(){
+    player.pause();
+  }
+  boolean isOver(){
+    println(player.position()+"=="+player.length());
+    return (player.length()-player.position()<100);
+  }
+  void stop(){
+    if(player!=null){
+      player.close();
+    }
+  }
 }

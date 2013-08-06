@@ -39,13 +39,12 @@ class Xian {
   void play(int status,float a, float l, float r){
     this.status = status;
     if(status==2){
-      vibrate(a,l,headX);
-      playTunes(1);
-      //until mouse up
-      this.status = 20;
+      vibrate(a,l,headX); //until mouse up
+      
     }else{
       vibrate(a,l,r);
     }
+    if(mode==1){
     switch (status){
       case 0:  // silent
         break;
@@ -53,12 +52,14 @@ class Xian {
         playTunes(0);
         break;
       case 2:  // an yin
-
+        playTunes(1);
         //until mouse up
         break;
       case 3: // fan yin
         playTunes(2);
     }
+    }
+    if(status==2)this.status = 20;
   }
   void draw(){
     stroke(255);
@@ -104,6 +105,10 @@ class Xian {
       }
     }
     draw();
+  }
+  
+  boolean isVibrate(){
+    return boolean(status);
   }
   
   void vibrate (float a, float l, float r){ //Amplitude, lefthand position, righthand position

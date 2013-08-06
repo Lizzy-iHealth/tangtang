@@ -4,9 +4,11 @@ class MelodyManager{
   String[] mp3Names;
   Melody[] melodies;
   int melodyNum;
+  int currentPlayingIndex;
   
   MelodyManager(String playList){
     this.playList = playList;
+    currentPlayingIndex=-1;
     String[] lines = loadStrings(playList);
     if (lines == null){
       mp3Names = null;
@@ -38,6 +40,38 @@ class MelodyManager{
   }
   
   void play(int index){
+    if(index!=currentPlayingIndex){
+      melodies[index].rewind();
+      currentPlayingIndex = index;
+    }
     melodies[index].play();
+    
   }
+  void play(){
+    melodies[currentPlayingIndex].play();
+  }
+  boolean isPlaying(){
+    return melodies[currentPlayingIndex].isPlaying();
+  }
+  void pause(){
+    melodies[currentPlayingIndex].pause();
+  }
+  
+  void update(){
+    
+      if(history.timeSinceLastPlayed()>DEFAULT_PLAY_TIME*1000){
+        //fade out
+        pause();
+      }
+      if(!melodies[currentPlayingIndex].isPlaying()){
+        currentPlayingIndex=-1;
+        mode=1;
+      }
+  }
+void stop(){
+  for (Melody m:melodies){
+    m.stop();
+  }
+}  
+    
 }
