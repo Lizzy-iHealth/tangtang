@@ -9,6 +9,8 @@ int FrameRate = 30;
 int DEFAULT_PLAY_TIME = 3 ;// 2s play time
 float DEFAULT_AMP=6;
 float EPS = 5;
+float xianHead;
+float xianTail=0;
 Minim minim;
 PlayHistory history;
 //MelodyManager melodyManager;
@@ -21,8 +23,8 @@ void setup(){
   
   history = new PlayHistory();
   // draw static Xian 
-  float xianHead=width;
-  float xianTail=0;
+  xianHead=width;
+  xianTail=0;
   float xianTop = height*0.2;
   float xianBottom = height*0.95;
   
@@ -34,7 +36,7 @@ void setup(){
      
      float currentXianHeight = xianTop + xianOffset * i;
      xianHeight[i] = currentXianHeight;
-     xian[i]= new Xian(i+1,xianHead,currentXianHeight,xianTail,currentXianHeight);
+     xian[i]= new Xian(i+1,xianHead,currentXianHeight,xianTail,currentXianHeight,ceil((9-i)/2));
   }
   ellipseMode(RADIUS);
   // initHui;
@@ -74,7 +76,7 @@ void mouseDragged() {
                if(xian[i].near(mouseX,mouseY)){
                  int status = 2;
                  if(xian[i].status!=20){ //not already played.
-                   play(i,status,DEFAULT_AMP,mouseX,mouseX);
+                   play(i,status,DEFAULT_AMP,mouseX,xianHead);
                  }
                }
          }
@@ -82,7 +84,7 @@ void mouseDragged() {
        for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
          if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
          int status = 1;
-         play(i,status,DEFAULT_AMP,0,mouseX);
+         play(i,status,DEFAULT_AMP,xianTail,mouseX);
        }
      }
      }
@@ -113,7 +115,7 @@ void mouseClicked(){
    for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
      if(xian[i].near(mouseX,mouseY)){
        int status = 3;
-       play(i,status,DEFAULT_AMP*0.3,0,mouseX);
+       play(i,status,DEFAULT_AMP*0.3,mouseX,xianHead);
      }
    }
        
