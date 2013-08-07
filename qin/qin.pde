@@ -11,7 +11,7 @@ float DEFAULT_AMP=6;
 float EPS = 5;
 Minim minim;
 PlayHistory history;
-MelodyManager melodyManager;
+//MelodyManager melodyManager;
 int mode; //1: nomal, 2:Melody
 
 void setup(){
@@ -57,7 +57,7 @@ void setup(){
   }
   
   //initMelody();
-  melodyManager = new MelodyManager("playlist.txt");
+  //melodyManager = new MelodyManager("playlist.txt");
   mode=1;
 }
 
@@ -104,7 +104,7 @@ void mouseMoved(){
        play(i,status,DEFAULT_AMP,0,mouseX);
      }
    }
-  // println("("+mouseX+" , "+mouseY+" )");
+
        
 }
 
@@ -124,8 +124,9 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
 
     history.addNote(n);
     
-    int[] id = history.getXianHistory(5);
+    /*
     if(mode != 2){
+      int[] id = history.getXianHistory(5);
       int mIndex = melodyManager.findMelodyById(id);
       if(mIndex>=0){
         mode = 2;
@@ -134,11 +135,8 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
     }else{
       melodyManager.play();
     }
-    
-  //  println(join(nf(id,0)," "));
-//    history.printHistory();
-//    println("------------------------");
- // audioTest();
+    */
+
 }
 
 
@@ -154,16 +152,16 @@ void draw(){
   for (int i = 0; i < DEFAULT_XIAN_NUM; ++i){
     xian[i].update();
   }
-  
+  /*
   if(mode==2) {melodyManager.update();}
-  
+  */
 }
 
 void stop(){
   for(int i =0;i<DEFAULT_XIAN_NUM;i++){
     xian[i].stop();
   }
-  melodyManager.stop();
+/*  melodyManager.stop();*/
   minim.stop();
   super.stop();
 }
