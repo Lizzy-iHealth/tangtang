@@ -1,4 +1,15 @@
-import ddf.minim.*;
+interface JavaScript {
+    void play(int index);
+    void setGain(int index,float value);
+    void play(int xianName,int status,float rate); // default is 1;
+    void setPlaybackRate(int xianName,int status,float rate);
+}
+
+  void bindJavascript(JavaScript j) {
+    js = j;
+  }
+
+  JavaScript js;
 
 int DEFAULT_XIAN_NUM =7;
 Xian[] xian;
@@ -11,15 +22,15 @@ float DEFAULT_AMP=6;
 float EPS = 5;
 float xianHead;
 float xianTail=0;
-Minim minim;
+
 PlayHistory history;
 //MelodyManager melodyManager;
 int mode; //1: nomal, 2:Melody
 
 void setup(){
-  size(1200,360);
+  size(1000,360);
   frameRate(FrameRate);
-  minim = new Minim(this);
+
   
   history = new PlayHistory();
   // draw static Xian 
@@ -32,8 +43,8 @@ void setup(){
   EPS=xianOffset*0.3;
   xian = new Xian[DEFAULT_XIAN_NUM];
   float [] xianHeight = new float[DEFAULT_XIAN_NUM];
-  for(int i = 0; i<DEFAULT_XIAN_NUM; ++i){
-     
+  //for(int i = 0; i<DEFAULT_XIAN_NUM; ++i){
+  for(int i = DEFAULT_XIAN_NUM-1; i>=0;--i){   
      float currentXianHeight = xianTop + xianOffset * i;
      xianHeight[i] = currentXianHeight;
      xian[i]= new Xian(i+1,xianHead,currentXianHeight,xianTail,currentXianHeight,ceil((9-i)/2));
@@ -65,29 +76,35 @@ void setup(){
 
 boolean moveAlongX(int px, int py, int x, int y){
   
-  if( abs(px-x)>abs(py-y)) return true;
+  if( abs(px-x)>2*abs(py-y)) return true;
   else return false;
 }  
 // Drag (click and hold) your mouse across the 
 // image to change the value of the rectangle
 void mouseDragged() {
-     if(moveAlongX(pmouseX,pmouseY,mouseX,mouseY)){
+     if(!keyPressed&&moveAlongX(pmouseX,pmouseY,mouseX,mouseY)){
               for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
                if(xian[i].near(mouseX,mouseY)){
                  int status = 2;
                  if(xian[i].status!=20){ //not already played.
                    play(i,status,DEFAULT_AMP,mouseX,xianHead);
+                 }else{
+                   float r = xian[i].calcPlaybackRate(status,mouseX);
+                   xian[i].updatePlaybackRate(r);
                  }
                }
          }
      }else{
-       for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
+ /*      for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
          if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
          int status = 1;
          play(i,status,DEFAULT_AMP,xianTail,mouseX);
        }
      }
+ */
+        return;
      }
+     
 }
 void mouseReleased(){
      for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
@@ -97,14 +114,67 @@ void mouseReleased(){
    }
 }
 
+void keyPressed(){
+     int x=-1;
+     println(key);
+     switch (key){
+       case '1':
+         x=0;
+         break;
+       case '2':
+         x=1;
+         break;
+       case '3':
+         x=2;
+         break;
+       case '4':
+         x=3;
+         break;
+       case '5':
+         x=4;
+         break;
+       case '6':
+         x=5;
+         break;
+       case '7':
+         x=6;
+         break;
+     }
+     
+     if (x==-1)return;  
+     int status;
+     if(!mousePressed){
+         if(xian[x].near(mouseX,mouseY)){//fan
+            status = 3;
+            play(x,status,DEFAULT_AMP*0.3,mouseX,xianHead);
+         }else{//san
+            status = 1;
+            play(x,status,DEFAULT_AMP,xianTail,xianHead);
+         } 
+     }else{
+       if(xian[x].near(mouseX,mouseY)){//an
+            status = 2;
+            play(x,status,DEFAULT_AMP,mouseX,xianHead);
+       }else{
+         return;
+       }
+     }
+}
 void mouseMoved(){
-  
+   if(mousePressed){
    for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
-     if(xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
+/*     if(xian[i].near(mouseX,mouseY)&&xian[i].crossed(pmouseX,pmouseY,mouseX,mouseY)){
        int status = 1;
        
-       play(i,status,DEFAULT_AMP,0,mouseX);
+       play(i,status,DEFAULT_AMP,xianTail,mouseX);
      }
+     */
+       if(xian[i].near(mouseX,mouseY)&&moveAlongX(pmouseX,pmouseY,mouseX,mouseY)){
+                   
+         float r = xian[i].calcPlaybackRate(20,mouseX);
+         xian[i].updatePlaybackRate(r);
+       }
+   }
    }
 
        
@@ -128,7 +198,7 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
     
     /*
     if(mode != 2){
-      int[] id = history.getXianHistory(5);
+      int[] id = history.getXianHistory(F);
       int mIndex = melodyManager.findMelodyById(id);
       if(mIndex>=0){
         mode = 2;
@@ -160,10 +230,11 @@ void draw(){
 }
 
 void stop(){
+ /*
   for(int i =0;i<DEFAULT_XIAN_NUM;i++){
     xian[i].stop();
   }
+  */
 /*  melodyManager.stop();*/
-  minim.stop();
   super.stop();
 }

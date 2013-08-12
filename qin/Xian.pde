@@ -9,7 +9,9 @@ class Xian {
   int status;//0:stable, 1:san yin, 2 an yin, 3 fan yin, 20 an yin continue...
   
   int tunesNum;
-  AudioPlayer[] tunes; // san, an, fan
+  int currentTune;
+  //float playbackRate;
+  
   // Constructor
   Xian(int name, float headX,float headY,float tailX,float tailY,int dia){
     this.name = name;
@@ -22,72 +24,82 @@ class Xian {
     r=headX;
     this.dia=dia;
     hz = 200;
-    tunesNum = 3; //0: san, 1: a7, 2: f7, 3:an-left, 4: an-right, 5: f9, 6: f4,  
+    tunesNum = 7; //0: san, 1: a7, 2: f7, 3:an-left, 4: an-right, 5: f9, 6: f4,  
     time = DEFAULT_PLAY_TIME;
-    tunes = new AudioPlayer[tunesNum]; 
-    loadSoundFile();
+  //  tunes = new AudioPlayer[tunesNum]; 
+    /* load at start time */
+ //   loadSoundFile();
+    currentTune=-1;
+    playbackRate=1;
   }
   void loadSoundFile(){
     for (int i =0;i<tunesNum;i++){
       String fn = str(name)+"-"+str(i)+".mp3";
-      println("load:"+fn);
-      tunes[i] = minim.loadFile(fn);
+      
+      tunes[i] = minim.loadFile(fn,2048);
+   //   println("load:"+fn+" "+tunes[i]);
     }
   }
-  void playTunes(int h){
-    int i=0;
-    switch (h){
-      case 0:
-        i = 0;
-        break;
-      case 1:
-        if(l<tailX+0.333*(headX-tailX)){
-          i=3;
-        }else if(l<tailX+0666*(headX-tailX)){
-          i=1;
-        }else {
-          i=4;
-        }
-        break;
-      case 2:
-        if(l<tailX+0.333*(headX-tailX)){
-          i=5;
-        }else if(l<tailX+0666*(headX-tailX)){
-          i=2;
-        }else {
-          i=6;
-        }
-        break;
-    }
-    tunes[i].rewind();
-    tunes[i].play();
+  void playTunes(int status,float playbackRate){
+    js.play(name,status,playbackRate);
   }
+  
   void play(int status,float a, float l, float r){
     this.status = status;
     vibrate(a,l,r);
-
     if(mode==1){
+      float playbackRate=1;
     switch (status){
       case 0:  // silent
         break;
-      case 1:  //san yin
-        playTunes(0);
+      case 2:  // an
+      case 3:  // fan
+        playbackRate = calcPlaybackRate(status,l);
+      case 1:  // san
+        playTunes(status,playbackRate);
         break;
-      case 2:  // an yin
-        playTunes(1);
-        //until mouse up
-        break;
-      case 3: // fan yin
-        playTunes(2);
+      case 20:
+        playbackRate = calcPlaybackRate(status,l);
+        updatePlaybackRate(playbackRate);
     }
     }
     if(status==2)this.status = 20;
+  }
+  float calcPlaybackRate(int status,int x){
+    // calculate playbackRate according to status and coordinate X
+    float playbackRate=1;
+    float l = headX-tailX;
+    float vl= headX-x;
+    switch (status){
+        case 0:
+        case 1:
+          playbackRate=1;
+          break;
+        case 2:
+        case 20:
+          playbackRate=l/vl;
+          break;
+        case 3:
+          fl= 0.5*l;
+          if (vl>fl) vl=l-vl;
+          playbackRate=fl/vl;
+          break;
+    }
+    return playbackRate;
+  }
+  void updatePlaybackRate(float r){
+    js.setPlaybackRate(name,status,r);
   }
   void draw(){
     stroke(255);
     strokeWeight(dia);
     float totalAngle = time*hz*2*PI;
-    float curA = a*(1-angle/totalAngle)*cos(angle);
+    float curA;
+    //if(tunes[currentTune]!=null){
+    //  curA = tunes[currentTune].left.get(waveXposition)*a; //get Amp. check minim.js for support.
+    //}else{
+      curA = a*(1-angle/totalAngle)*cos(angle);
+    //}
     switch (status) {
       case 0:
         line(tailX,tailY,headX,headY);
@@ -144,7 +156,7 @@ class Xian {
   
   void stop(){
     for (int i = 0; i<tunes.length; i++) {
-      tunes[i].close();
+   //   tunes[i].close();
     }
   }
 }
