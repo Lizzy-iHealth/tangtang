@@ -10,7 +10,8 @@ class Xian {
   
   int tunesNum;
   int currentTune;
-  //float playbackRate;
+  int xianColor;
+
   
   // Constructor
   Xian(int name, float headX,float headY,float tailX,float tailY,int dia){
@@ -31,6 +32,7 @@ class Xian {
  //   loadSoundFile();
     currentTune=-1;
     playbackRate=1;
+    xianColor=#d5c59f;
   }
   void loadSoundFile(){
     for (int i =0;i<tunesNum;i++){
@@ -91,7 +93,7 @@ class Xian {
     js.setPlaybackRate(name,status,r);
   }
   void draw(){
-    stroke(255);
+    stroke(xianColor);
     strokeWeight(dia);
     float totalAngle = time*hz*2*PI;
     float curA;

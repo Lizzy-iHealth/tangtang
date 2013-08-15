@@ -22,7 +22,7 @@ float DEFAULT_AMP=6;
 float EPS = 5;
 float xianHead;
 float xianTail=0;
-
+int bgColor=#5f3c23;
 PlayHistory history;
 //MelodyManager melodyManager;
 int mode; //1: nomal, 2:Melody
@@ -216,7 +216,7 @@ void play (int i,int status,float a, float l, float r){ // xian index, vibrate s
 
 void draw(){
   
-  background(0);
+  background(bgColor);
   for(int i =0; i< DEFAULT_HUI_NUM; i++){
     hui[i].draw();
   }

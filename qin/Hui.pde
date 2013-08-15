@@ -11,7 +11,7 @@ class Hui{
    centerX = x;
    centerY = y;
    radias = r;
-   c=#F0F0F0;
+   c=#F2eada;
   }
   
   void draw(){
