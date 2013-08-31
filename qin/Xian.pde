@@ -30,7 +30,7 @@ class Xian {
   void loadSoundFile(){
     for (int i =0;i<tunesNum;i++){
       String fn = str(name)+"-"+str(i)+".mp3";
-      println("load:"+fn);
+     // println("load:"+fn);
       tunes[i] = minim.loadFile(fn);
     }
   }
@@ -43,7 +43,7 @@ class Xian {
       case 1:
         if(l<tailX+0.333*(headX-tailX)){
           i=3;
-        }else if(l<tailX+0666*(headX-tailX)){
+        }else if(l<tailX+0.666*(headX-tailX)){
           i=1;
         }else {
           i=4;
@@ -52,13 +52,14 @@ class Xian {
       case 2:
         if(l<tailX+0.333*(headX-tailX)){
           i=5;
-        }else if(l<tailX+0666*(headX-tailX)){
+        }else if(l<tailX+0.666*(headX-tailX)){
           i=2;
         }else {
           i=6;
         }
         break;
     }
+    //println("tune index is "+i+"left position is "+l);
     tunes[i].rewind();
     tunes[i].play();
   }

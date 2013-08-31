@@ -17,7 +17,7 @@ PlayHistory history;
 int mode; //1: nomal, 2:Melody
 
 void setup(){
-  size(1200,360);
+  size(1000,360);
   frameRate(FrameRate);
   minim = new Minim(this);
   
@@ -97,6 +97,7 @@ void mouseReleased(){
    }
 }
 
+/*
 void mouseMoved(){
   
    for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
@@ -109,7 +110,7 @@ void mouseMoved(){
 
        
 }
-
+*/
 void mouseClicked(){
   
    for(int i = 0; i<DEFAULT_XIAN_NUM;i++){
