@@ -22,7 +22,7 @@ class Xian {
     r=headX;
     this.dia=dia;
     hz = 200;
-    tunesNum = 3; //0: san, 1: a7, 2: f7, 3:an-left, 4: an-right, 5: f9, 6: f4,  
+    tunesNum = 7; //0: san, 1: a7, 2: f7, 3:an-left, 4: an-right, 5: f9, 6: f4,  
     time = DEFAULT_PLAY_TIME;
     tunes = new AudioPlayer[tunesNum]; 
     loadSoundFile();
